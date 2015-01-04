@@ -1,3 +1,6 @@
 logs
 2.*
 build
+*.iml
+*.ipr
+*.iws

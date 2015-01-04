@@ -1,12 +1,14 @@
 web:
   image: dockerfile/java:oracle-java8
-  working_dir: /app/api
-  command: ./gradlew clean bootRun --project-cache-dir /app/api
+  working_dir: /app/web
+  command: ./gradlew clean bootRun --project-cache-dir /app/web
   environment:
     GRADLE_OPTS: "-Dgradle.user.home=/app/.user_gradle"
+    SERVER_TOMCAT_BASEDIR: /app/basedir/
   volumes:
-    - web/:/app/api/
+    - web/:/app/web/
     - ~/.gradle:/app/.user_gradle
+    - ../:/app/basedir/
   ports:
     - 9191:9191
     - 9192:9192

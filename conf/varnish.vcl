@@ -16,7 +16,7 @@ sub vcl_recv {
     # Typically you clean up the request here, removing cookies you don't need,
     # rewriting the request, etc.
 
-    if (req.url ~ "^/java/") {
+    if (req.url ~ "^/management/") {
         set req.backend_hint = management;
     } else {
         set req.backend_hint = default;
