@@ -1,0 +1,27 @@
+logging:
+  level:
+    org:
+      apache: WARN
+      codehaus.groovy: WARN
+      elasticsearch: WARN
+      flywaydb: WARN
+      glassfish: TRACE
+      hibernate: WARN
+      springframework: WARN
+      springframework.boot: WARN
+      springframework.boot.context.embedded.tomcat: INFO
+      springframework.cache: TRACE
+      springframework.cloud: TRACE
+    gex.jaxrs: DEBUG
+    gex.serling.pub: DEBUG
+    gex.serling.pub.restv1.providers: DEBUG
+    grails: WARN
+
+
+
+server:
+  port: 9191
+
+management:
+  port: 9192
+

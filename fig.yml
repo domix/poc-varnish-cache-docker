@@ -1,0 +1,31 @@
+web:
+  image: dockerfile/java:oracle-java8
+  working_dir: /app/api
+  command: ./gradlew clean bootRun --project-cache-dir /app/api
+  environment:
+    GRADLE_OPTS: "-Dgradle.user.home=/app/.user_gradle"
+  volumes:
+    - web/:/app/api/
+    - ~/.gradle:/app/.user_gradle
+  ports:
+    - 9191:9191
+    - 9192:9192
+
+varnish:
+  image: million12/varnish
+  volumes:
+    - ./conf/:/varnish/conf
+  environment:
+    VCL_CONFIG: "/varnish/conf/varnish.vcl"
+  links:
+    - nginx
+    - web
+  ports:
+    - 80:80
+
+nginx:
+  image: dockerfile/nginx
+  ports:
+    - 9090:80
+  volumes:
+    - ./logs/:/var/log/nginx
