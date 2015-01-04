@@ -31,6 +31,11 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-web")
+
+    compile("org.springframework.boot:spring-boot-starter-jade4j:0.1.4.2")
+    compile 'org.webjars:bootstrap:3.3.1'
+    compile 'org.webjars:font-awesome:4.2.0'
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
