@@ -22,7 +22,6 @@ varnish:
   environment:
     VCL_CONFIG: "/varnish/conf/varnish.vcl"
   links:
-    - nginx
     - web
   ports:
     - 80:80
@@ -33,8 +32,12 @@ nginx:
     - 9090:80
   volumes:
     - ./logs/:/var/log/nginx
+  links:
+    - varnish
+    - rabbitmq
 
 rabbitmq:
-  image: rabbitmq
+  image: rabbitmq:management
   ports:
     - 5672:5672
+    - 15672:15672
