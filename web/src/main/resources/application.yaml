@@ -27,10 +27,13 @@ server:
     accessLogEnabled: true
     #accessLogPattern: '%a %l %u %t "%r" %s %b %{Host}i %{Location}o'
     accessLogPattern: combined
-    baseDir: '..'
+    baseDir: ''
     backgroundProcessorDelay: 1
 
 management:
   port: 9192
   context-path: /management
   security.enabled: false
+
+
+spring.jade4j.caching: false

@@ -6,6 +6,10 @@ block page_title
       small #{util.message('subtitle')}
 
 block body
-  include ./detail/detail.jade
-  each property in properties
-    +property_detail(property)
+  //- "widgets/${widgetId}/${device}"
+  - var the_template = 'widgets/propertyDetail/' + __device + '.jade'
+  #{the_template}
+  #{__device}
+  //-include ./detail/detail.jade
+  //-each property in properties
+  //-  +property_detail(property)

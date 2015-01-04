@@ -21,6 +21,19 @@ sub vcl_recv {
     } else {
         set req.backend_hint = default;
     }
+
+    if (req.method == "BAN" || req.method == "PURGE") {
+        # Same ACL check as above:
+        #if (!client.ip ~ purge) {
+            #return(synth(403, "Not allowed."));
+        #}
+
+        ban("obj.http.x-url ~ " + req.url); # Assumes req.url is a regex. This might be a bit too simple
+
+        # Throw a synthetic page so the
+        # request won't go to the backend.
+        return(synth(200, "Ban added"));
+    }
 }
 
 sub vcl_backend_response {
@@ -28,6 +41,16 @@ sub vcl_backend_response {
     #
     # Here you clean the response headers, removing silly Set-Cookie headers
     # and other mistakes your backend does.
+
+    #if (beresp.http.Content-Type ~ "^image/") {
+    if (beresp.status == 404) {
+        #set beresp.http.Cache-Control = "public, max-age=60";
+        #set beresp.ttl = 60s;
+        set beresp.http.Cache-Control = "public, max-age=0";
+        set beresp.ttl = 0s;
+    }
+
+    set beresp.http.x-url = bereq.url;
 }
 
 sub vcl_deliver {
@@ -35,4 +58,7 @@ sub vcl_deliver {
     # response to the client.
     #
     # You can do accounting or modifying the final object here.
+
+    unset resp.http.Server;
+    unset resp.http.X-Powered-By;
 }
