@@ -16,8 +16,7 @@ logging:
     gex.serling.pub: DEBUG
     gex.serling.pub.restv1.providers: DEBUG
     grails: WARN
-
-
+    demo.widget.render: DEBUG
 
 server:
   port: 9191
@@ -36,4 +35,7 @@ management:
   security.enabled: false
 
 
-spring.jade4j.caching: false
+spring.jade4j:
+  prettyPrint: true
+
+app.host: localhost

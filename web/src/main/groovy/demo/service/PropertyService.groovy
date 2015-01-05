@@ -1,4 +1,4 @@
-package demo
+package demo.service
 
 import demo.domain.Property
 import gex.commons.exception.ObjectNotFoundException

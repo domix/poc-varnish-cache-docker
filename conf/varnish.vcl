@@ -34,6 +34,11 @@ sub vcl_recv {
         # request won't go to the backend.
         return(synth(200, "Ban added"));
     }
+
+    if (req.url !~ "__render_mode=markup") {
+        
+    }
+    
 }
 
 sub vcl_backend_response {
@@ -48,6 +53,11 @@ sub vcl_backend_response {
         #set beresp.ttl = 60s;
         set beresp.http.Cache-Control = "public, max-age=0";
         set beresp.ttl = 0s;
+    }
+
+    if (beresp.http.X-Esi) {
+        set beresp.do_esi = true;
+        unset beresp.http.X-Esi; # remove header
     }
 
     set beresp.http.x-url = bereq.url;

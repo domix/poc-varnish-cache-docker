@@ -4,6 +4,7 @@ web:
   command: ./gradlew clean bootRun --project-cache-dir /app/web
   environment:
     GRADLE_OPTS: "-Dgradle.user.home=/app/.user_gradle"
+    APP_HOST: 192.168.59.103
   volumes:
     - web/:/app/web/
     - ~/.gradle:/app/.user_gradle

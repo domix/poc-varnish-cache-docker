@@ -1,13 +1,16 @@
-package demo.controller
+package demo.widget.controller
 
-import demo.PropertyService
+import demo.widget.service.WidgetRendererService
+import demo.widget.service.WidgetService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
+import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /**
@@ -16,22 +19,22 @@ import javax.servlet.http.HttpServletResponse
 @Controller
 class WidgetController {
   public static final String DEVICE = '__device'
+  public static final String MARKUP = 'markup'
   @Autowired
-  PropertyService propertyService
+  WidgetService widgetService
+  @Autowired
+  WidgetRendererService widgetRendererService
 
   @RequestMapping('/widget/{widgetId}/{id}')
-  String widget(
+  void widget(
     @PathVariable String widgetId,
     @PathVariable String id,
-    @RequestParam(value = '__device', defaultValue = 'desktop') String device,
-    @RequestParam(value = '__render_mode', defaultValue = 'markup') String renderMode, Model model, HttpServletResponse response) {
-
-    model.addAttribute('property', propertyService.getById(id))
-    model.addAttribute(DEVICE, device)
-    model.addAttribute('__render_mode', renderMode)
+    Model model, HttpServletRequest request, HttpServletResponse response,
+    @RequestParam MultiValueMap params) {
 
     response.addHeader('X-Article-id', id)
+    response.contentType = 'text/html; charset=UTF-8'
 
-    "widgets/$widgetId/$device"
+    response.writer.write(widgetService.render(widgetId, id, params, model, request, response))
   }
 }
