@@ -23,21 +23,17 @@ class WidgetService {
   WidgetRendererService widgetRendererService
 
   Widget getWidget(String id, String contentId, MultiValueMap params) {
-    def widgetComponents = applicationContext.getBeansOfType(WidgetComponent)
-
-    def widgetComponent = widgetComponents.entrySet().stream().filter({ it.value.id() == id }).map({
+    applicationContext.getBeansOfType(WidgetComponent).entrySet().stream().filter({ it.value.id() == id }).map({
       it.value
     }).findFirst().orElseThrow({
-      throw new ObjectNotFoundException(id, 'widget')
-    })
+      throw new ObjectNotFoundException(id, 'widgetComponent')
+    }).build(id, contentId, params)
 
-    def model = widgetComponent.model(id, contentId, params)
-
-    new Widget(widgetId: id, contentId: contentId, model: model)
   }
 
   String render(String widgetId, String contentId, MultiValueMap params, Model model, HttpServletRequest request, HttpServletResponse response) {
     Widget widget = getWidget(widgetId, contentId, params)
+
     widgetRendererService.render(widget, params, model, request, response)
   }
 }

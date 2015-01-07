@@ -1,6 +1,7 @@
 package demo.widget.service
 
 import de.neuland.jade4j.JadeConfiguration
+import demo.widget.ComposableWidget
 import demo.widget.Widget
 import demo.widget.controller.WidgetController
 import demo.widget.render.RenderContextHolder
@@ -33,14 +34,44 @@ class WidgetRendererService {
     String device = renderEnvironment.device
     String renderMode = renderEnvironment.renderMode
 
-    if (renderMode == MARKUP) {
-      def template = jadeConfiguration.getTemplate("widgets/$widget.widgetId/$device")
-      jadeConfiguration.renderTemplate(template, widget.model)
-    } else {
-      def uriComponents = MvcUriComponentsBuilder.fromMethodName(WidgetController, "widget", widget.widgetId, widget.contentId, model, request, response, params).host(hostname).queryParams(params).build()
-      def uriString = uriComponents.toUriString()
+    def template = jadeConfiguration.getTemplate("widgets/$widget.widgetId/$device")
 
-      "<esi:include src=\"${uriString}\"/>"
+    if (renderMode == MARKUP) {
+
+
+      if (widget instanceof ComposableWidget) {
+        ComposableWidget composableWidget = (ComposableWidget) widget
+
+        def modelWidget = [:]
+        composableWidget.widgets.each { id, value ->
+          modelWidget.put(id, render(value, params, model, request, response))
+        }
+
+        jadeConfiguration.renderTemplate(template, [properties: modelWidget])
+      } else {
+        jadeConfiguration.renderTemplate(template, widget.model)
+      }
+    } else {
+
+
+      if (widget instanceof ComposableWidget) {
+        ComposableWidget composableWidget = (ComposableWidget) widget
+
+        def modelWidget = [:]
+        composableWidget.widgets.each { id, value ->
+          modelWidget.put(id, render(value, params, model, request, response))
+        }
+
+        jadeConfiguration.renderTemplate(template, [properties: modelWidget])
+      } else {
+
+        params.remove("__render_mode")
+
+        def uriComponents = MvcUriComponentsBuilder.fromMethodName(WidgetController, "widget", widget.widgetId, widget.contentId, model, request, response, params).host(hostname).queryParams(params).build()
+        def uriString = uriComponents.toUriString()
+
+        "<esi:include src=\"${uriString}\"/>"
+      }
     }
   }
 }

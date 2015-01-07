@@ -1,6 +1,7 @@
 package demo.widget.components
 
 import demo.service.PropertyService
+import demo.widget.Widget
 import demo.widget.WidgetComponent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -15,8 +16,10 @@ class PropertyDetailWidget implements WidgetComponent {
   PropertyService propertyService
 
   @Override
-  Map<String, Map> model(String widgetId, String contentId, MultiValueMap params) {
-    [property: propertyService.getById(contentId)]
+  Widget build(String widgetId, String contentId, MultiValueMap params) {
+    def model = [property: propertyService.getById(contentId)]
+
+    new Widget(contentId: contentId, model: model, widgetId: widgetId, params: params).addContentIdReference(contentId)
   }
 
   @Override

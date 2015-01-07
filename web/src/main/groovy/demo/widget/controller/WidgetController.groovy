@@ -35,6 +35,8 @@ class WidgetController {
     response.addHeader('X-Article-id', id)
     response.contentType = 'text/html; charset=UTF-8'
 
-    response.writer.write(widgetService.render(widgetId, id, params, model, request, response))
+    def widgetContent = widgetService.render(widgetId, id, params, model, request, response)
+
+    response.writer.write(widgetContent)
   }
 }
