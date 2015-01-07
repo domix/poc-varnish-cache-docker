@@ -1,6 +1,7 @@
 package demo.widget.service
 
 import de.neuland.jade4j.JadeConfiguration
+import de.neuland.jade4j.template.JadeTemplate
 import demo.widget.ComposableWidget
 import demo.widget.Widget
 import demo.widget.controller.WidgetController
@@ -39,27 +40,13 @@ class WidgetRendererService {
     if (renderMode == MARKUP) {
 
       if (widget instanceof ComposableWidget) {
-        ComposableWidget composableWidget = (ComposableWidget) widget
-
-        def modelWidget = [:]
-        composableWidget.widgets.each { id, value ->
-          modelWidget.put(id, render(value, params, model, request, response))
-        }
-
-        jadeConfiguration.renderTemplate(template, [properties: modelWidget])
+        renderComposableWidget(widget, params, model, request, response, template)
       } else {
         jadeConfiguration.renderTemplate(template, widget.model)
       }
     } else {
       if (widget instanceof ComposableWidget) {
-        ComposableWidget composableWidget = (ComposableWidget) widget
-
-        def modelWidget = [:]
-        composableWidget.widgets.each { id, value ->
-          modelWidget.put(id, render(value, params, model, request, response))
-        }
-
-        jadeConfiguration.renderTemplate(template, [properties: modelWidget])
+        renderComposableWidget(widget, params, model, request, response, template)
       } else {
 
         params.remove("__render_mode")
@@ -71,5 +58,14 @@ class WidgetRendererService {
         "<esi:include src=\"${uriString}\"/>"
       }
     }
+  }
+
+  private String renderComposableWidget(ComposableWidget widget, MultiValueMap params, Model model, HttpServletRequest request, HttpServletResponse response, JadeTemplate template) {
+    def modelWidget = [:]
+    widget.widgets.each { id, value ->
+      modelWidget.put(id, render(value, params, model, request, response))
+    }
+
+    jadeConfiguration.renderTemplate(template, [properties: modelWidget])
   }
 }
