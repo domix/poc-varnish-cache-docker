@@ -11,8 +11,8 @@ web:
   ports:
     - 9191:9191
     - 9192:9192
-  links:
-    - rabbitmq
+  #links:
+  #  - rabbitmq
 
 varnish:
   image: million12/varnish
@@ -25,18 +25,18 @@ varnish:
   ports:
     - 80:80
 
-nginx:
-  image: dockerfile/nginx
-  ports:
-    - 9090:80
-  volumes:
-    - ./logs/:/var/log/nginx
-  links:
-    - varnish
-    - rabbitmq
+#nginx:
+#  image: dockerfile/nginx
+#  ports:
+#    - 9090:80
+#  volumes:
+#    - ./logs/:/var/log/nginx
+#  links:
+#    - varnish
+#    - rabbitmq
 
-rabbitmq:
-  image: rabbitmq:management
-  ports:
-    - 5672:5672
-    - 15672:15672
+#rabbitmq:
+#  image: rabbitmq:management
+#  ports:
+#    - 5672:5672
+#    - 15672:15672

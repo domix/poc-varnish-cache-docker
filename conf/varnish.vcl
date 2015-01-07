@@ -35,6 +35,9 @@ sub vcl_recv {
         return(synth(200, "Ban added"));
     }
 
+    #if (!req.url ~ "\.(jpg|jpeg|png|gif|ico|tiff|tif|bmp|ppm|pgm|xcf|psd|webp|svg)") {
+    #    set req.http.X-Esi = "1";
+    #}
 }
 
 sub vcl_backend_response {
@@ -51,12 +54,12 @@ sub vcl_backend_response {
         set beresp.ttl = 0s;
     }
 
-    if (beresp.http.X-Esi) {
-        set beresp.do_esi = true;
-        unset beresp.http.X-Esi; # remove header
-    }
+    #if (beresp.http.X-Esi) {
+    #    set beresp.do_esi = true;
+    #    unset beresp.http.X-Esi; # remove header
+    #}
 
-    set beresp.http.x-url = bereq.url;
+    #set beresp.http.X-url = bereq.url;
 }
 
 sub vcl_deliver {
