@@ -35,10 +35,6 @@ sub vcl_recv {
         return(synth(200, "Ban added"));
     }
 
-    if (req.url !~ "__render_mode=markup") {
-        
-    }
-    
 }
 
 sub vcl_backend_response {

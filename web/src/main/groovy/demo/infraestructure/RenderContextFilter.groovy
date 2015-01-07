@@ -22,6 +22,9 @@ class RenderContextFilter extends AbstractFilter {
       filterChain.doFilter(request, response)
     }
     finally {
+      if(RenderContextHolder.renderEnvironment.renderMode == 'esi') {
+        response.addHeader('X-Esi', '1')
+      }
       resetContextHolders()
     }
   }
