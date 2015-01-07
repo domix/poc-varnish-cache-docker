@@ -38,7 +38,6 @@ class WidgetRendererService {
 
     if (renderMode == MARKUP) {
 
-
       if (widget instanceof ComposableWidget) {
         ComposableWidget composableWidget = (ComposableWidget) widget
 
@@ -52,8 +51,6 @@ class WidgetRendererService {
         jadeConfiguration.renderTemplate(template, widget.model)
       }
     } else {
-
-
       if (widget instanceof ComposableWidget) {
         ComposableWidget composableWidget = (ComposableWidget) widget
 
