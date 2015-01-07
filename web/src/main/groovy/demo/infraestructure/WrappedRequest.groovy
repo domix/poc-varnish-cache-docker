@@ -2,11 +2,15 @@ package demo.infraestructure
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletRequestWrapper
+import java.util.stream.Collector
+import java.util.stream.Collectors
 
 /**
  * Created by domix on 1/5/15.
  */
 class WrappedRequest extends HttpServletRequestWrapper {
+
+  def unusedParameters = ['__render_mode', '__device']
   /**
    * Constructs a request object wrapping the given request.
    *
@@ -20,8 +24,7 @@ class WrappedRequest extends HttpServletRequestWrapper {
   }
 
   @Override
-  public Map<String, String[]> getParameterMap()
-  {
-    //return local param map
+  Map<String, String[]> getParameterMap() {
+    null
   }
 }

@@ -63,6 +63,7 @@ class WidgetRendererService {
       } else {
 
         params.remove("__render_mode")
+        params.remove("__device")
 
         def uriComponents = MvcUriComponentsBuilder.fromMethodName(WidgetController, "widget", widget.widgetId, widget.contentId, model, request, response, params).host(hostname).queryParams(params).build()
         def uriString = uriComponents.toUriString()
