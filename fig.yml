@@ -25,12 +25,12 @@ varnish:
   ports:
     - 80:80
 
-#nginx:
-#  image: dockerfile/nginx
-#  ports:
-#    - 9090:80
-#  volumes:
-#    - ./logs/:/var/log/nginx
+nginx:
+  image: dockerfile/nginx
+  ports:
+    - 9090:80
+  volumes:
+    - ./logs/:/var/log/nginx
 #  links:
 #    - varnish
 #    - rabbitmq
