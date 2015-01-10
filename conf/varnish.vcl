@@ -35,9 +35,9 @@ sub vcl_recv {
         return(synth(200, "Ban added"));
     }
 
-    #if (!req.url ~ "\.(jpg|jpeg|png|gif|ico|tiff|tif|bmp|ppm|pgm|xcf|psd|webp|svg)") {
-    #    set req.http.X-Esi = "1";
-    #}
+    if (!req.url ~ "\.(jpg|jpeg|png|gif|ico|tiff|tif|bmp|ppm|pgm|xcf|psd|webp|svg)") {
+        set req.http.X-Esi = "1";
+    }
 }
 
 sub vcl_backend_response {
