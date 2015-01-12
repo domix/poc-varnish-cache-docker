@@ -1,39 +1,75 @@
-web:
+web1:
   image: dockerfile/java:oracle-java8
   working_dir: /app/web
-  command: ./gradlew clean bootRun --project-cache-dir /app/web
+  command: java -jar demo-0.0.1-SNAPSHOT.jar
   environment:
-    GRADLE_OPTS: "-Dgradle.user.home=/app/.user_gradle"
     APP_HOST: 192.168.59.103
   volumes:
-    - web/:/app/web/
-    - ~/.gradle:/app/.user_gradle
+    - web/build/libs/:/app/web/
   ports:
     - 9191:9191
     - 9192:9192
-  #links:
-  #  - rabbitmq
 
-varnish:
+web2:
+  image: dockerfile/java:oracle-java8
+  working_dir: /app/web
+  command: java -jar demo-0.0.1-SNAPSHOT.jar
+  environment:
+    APP_HOST: 192.168.59.103
+  volumes:
+    - web/build/libs/:/app/web/
+
+web3:
+  image: dockerfile/java:oracle-java8
+  working_dir: /app/web
+  command: java -jar demo-0.0.1-SNAPSHOT.jar
+  environment:
+    APP_HOST: 192.168.59.103
+  volumes:
+    - web/build/libs/:/app/web/
+
+web4:
+  image: dockerfile/java:oracle-java8
+  working_dir: /app/web
+  command: java -jar demo-0.0.1-SNAPSHOT.jar
+  environment:
+    APP_HOST: 192.168.59.103
+  volumes:
+    - web/build/libs/:/app/web/
+
+varnish1:
   image: million12/varnish
   volumes:
     - ./conf/:/varnish/conf
   environment:
     VCL_CONFIG: "/varnish/conf/varnish.vcl"
   links:
-    - web
+    - web1
+    - web2
   ports:
-    - 80:80
+    - 2335:80
+
+varnish2:
+  image: million12/varnish
+  volumes:
+    - ./conf/:/varnish/conf
+  environment:
+    VCL_CONFIG: "/varnish/conf/varnish.vcl"
+  links:
+    - web3
+    - web4
+  ports:
+    - 2336:80
 
 nginx:
   image: dockerfile/nginx
   ports:
-    - 9090:80
+    - 2380:80
   volumes:
     - ./logs/:/var/log/nginx
-#  links:
-#    - varnish
-#    - rabbitmq
+  links:
+    - varnish1
+    - varnish2
 
 #rabbitmq:
 #  image: rabbitmq:management

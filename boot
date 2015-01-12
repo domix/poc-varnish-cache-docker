@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-fig up
+cd web
+
+gradle clean bootRepackage && cd .. && fig up
+
 fig stop
 fig rm --force
 fig ps
