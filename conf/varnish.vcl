@@ -28,7 +28,9 @@ sub vcl_recv {
             #return(synth(403, "Not allowed."));
         #}
 
-        ban("obj.http.x-url ~ " + req.url); # Assumes req.url is a regex. This might be a bit too simple
+        #ban("obj.http.x-url ~ " + req.url); # Assumes req.url is a regex. This might be a bit too simple
+
+        ban ("obj.http.x-article-ids ~ " + req.url);
 
         # Throw a synthetic page so the
         # request won't go to the backend.
@@ -54,12 +56,12 @@ sub vcl_backend_response {
         set beresp.ttl = 0s;
     }
 
-    #if (beresp.http.X-Esi) {
-    #    set beresp.do_esi = true;
-    #    unset beresp.http.X-Esi; # remove header
-    #}
+    if (beresp.http.X-Esi) {
+        set beresp.do_esi = true;
+        unset beresp.http.X-Esi; # remove header
+    }
 
-    #set beresp.http.X-url = bereq.url;
+    set beresp.http.X-url = bereq.url;
 }
 
 sub vcl_deliver {

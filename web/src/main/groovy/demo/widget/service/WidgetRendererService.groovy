@@ -16,8 +16,6 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-import static WidgetController.MARKUP
-
 /**
  * Created by domix on 1/4/15.
  */
@@ -37,14 +35,12 @@ class WidgetRendererService {
 
     def template = jadeConfiguration.getTemplate("widgets/$widget.widgetId/$device")
 
-    if (renderMode == MARKUP) {
+    renderEnvironment.usedIds.addAll(widget.contentIdReferences)
+    renderEnvironment.usedIds << widget.contentId
 
-      if (widget instanceof ComposableWidget) {
-        renderComposableWidget(widget, params, model, request, response, template)
-      } else {
-        jadeConfiguration.renderTemplate(template, widget.model)
-      }
-    } else {
+    RenderContextHolder.setRenderEnvironment(renderEnvironment)
+
+    if (RenderContextHolder.isESI()) {
       if (widget instanceof ComposableWidget) {
         renderComposableWidget(widget, params, model, request, response, template)
       } else {
@@ -56,6 +52,13 @@ class WidgetRendererService {
         def uriString = uriComponents.toUriString()
 
         "<esi:include src=\"${uriString}\"/>"
+      }
+
+    } else {
+      if (widget instanceof ComposableWidget) {
+        renderComposableWidget(widget, params, model, request, response, template)
+      } else {
+        jadeConfiguration.renderTemplate(template, widget.model)
       }
     }
   }

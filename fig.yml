@@ -1,78 +1,31 @@
-web1:
+web:
   image: dockerfile/java:oracle-java8
   working_dir: /app/web
   command: java -jar demo-0.0.1-SNAPSHOT.jar
   environment:
-    APP_HOST: 192.168.59.103
+    APP_HOST: varnish
   volumes:
     - web/build/libs/:/app/web/
   ports:
     - 9191:9191
-    - 9192:9192
 
-web2:
-  image: dockerfile/java:oracle-java8
-  working_dir: /app/web
-  command: java -jar demo-0.0.1-SNAPSHOT.jar
-  environment:
-    APP_HOST: 192.168.59.103
-  volumes:
-    - web/build/libs/:/app/web/
-
-web3:
-  image: dockerfile/java:oracle-java8
-  working_dir: /app/web
-  command: java -jar demo-0.0.1-SNAPSHOT.jar
-  environment:
-    APP_HOST: 192.168.59.103
-  volumes:
-    - web/build/libs/:/app/web/
-
-web4:
-  image: dockerfile/java:oracle-java8
-  working_dir: /app/web
-  command: java -jar demo-0.0.1-SNAPSHOT.jar
-  environment:
-    APP_HOST: 192.168.59.103
-  volumes:
-    - web/build/libs/:/app/web/
-
-varnish1:
+varnish:
   image: million12/varnish
   volumes:
     - ./conf/:/varnish/conf
   environment:
     VCL_CONFIG: "/varnish/conf/varnish.vcl"
   links:
-    - web1
-    - web2
+    - web
   ports:
-    - 2335:80
-
-varnish2:
-  image: million12/varnish
-  volumes:
-    - ./conf/:/varnish/conf
-  environment:
-    VCL_CONFIG: "/varnish/conf/varnish.vcl"
-  links:
-    - web3
-    - web4
-  ports:
-    - 2336:80
+    - 8080:80
 
 nginx:
   image: dockerfile/nginx
   ports:
-    - 2380:80
+    - 80:80
   volumes:
     - ./logs/:/var/log/nginx
+    - ./nginx/:/etc/nginx/sites-enabled
   links:
-    - varnish1
-    - varnish2
-
-#rabbitmq:
-#  image: rabbitmq:management
-#  ports:
-#    - 5672:5672
-#    - 15672:15672
+    - varnish

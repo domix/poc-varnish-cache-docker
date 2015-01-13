@@ -109,4 +109,8 @@ class RenderContextHolder {
   static RenderEnvironment getRenderEnvironment() {
     getRenderContext()?.getRenderEnvironment()
   }
+
+  static Boolean isESI() {
+    getRenderContext()?.getRenderEnvironment()?.renderMode?.toLowerCase() == 'esi'
+  }
 }

@@ -8,6 +8,7 @@ import javax.servlet.FilterChain
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import java.util.stream.Collectors
 
 /**
  * Created by domix on 1/5/15.
@@ -22,9 +23,17 @@ class RenderContextFilter extends AbstractFilter {
       filterChain.doFilter(request, response)
     }
     finally {
-      if(RenderContextHolder.renderEnvironment.renderMode == 'esi') {
+
+      def usedIds = RenderContextHolder.renderEnvironment.usedIds.stream().distinct().sorted().collect(Collectors.toList()).join(',')
+
+      if (usedIds) {
+        response.addHeader('X-Article-IDs', usedIds)
+      }
+
+      if(RenderContextHolder.isESI()) {
         response.addHeader('X-Esi', '1')
       }
+
       resetContextHolders()
     }
   }
