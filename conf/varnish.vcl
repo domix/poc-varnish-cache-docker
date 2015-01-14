@@ -39,6 +39,7 @@ sub vcl_recv {
 
     if (!req.url ~ "\.(jpg|jpeg|png|gif|ico|tiff|tif|bmp|ppm|pgm|xcf|psd|webp|svg)") {
         set req.http.X-Esi = "1";
+        set req.http.Surrogate-Capability = "ESI/1.0";
     }
 }
 
